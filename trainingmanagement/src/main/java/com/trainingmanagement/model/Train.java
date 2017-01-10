@@ -1,13 +1,13 @@
 package com.trainingmanagement.model;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Train {
     private Integer trainid;
 
     private Integer userid;
 
-    private Date data;
+    private Timestamp data;
 
     public Integer getTrainid() {
         return trainid;
@@ -25,11 +25,11 @@ public class Train {
         this.userid = userid;
     }
 
-    public Date getData() {
+    public Timestamp getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(Timestamp data) {
         this.data = data;
     }
 }

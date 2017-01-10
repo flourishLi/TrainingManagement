@@ -14,27 +14,35 @@ public class UserImpl implements UserInterface {
 
 	@Autowired
 	UserMapper userDAO;
-	public int SignIn(String username, String password) {
+	public String SignIn(String username, String password) {
 		//查询用户是否存在
+		try{
 		User user=userDAO.selectByUserName(username);
 		if(user !=null){//用户名密码核对
 			user=userDAO.selectByUserNameAndPassword(username,password);
 			if(user!=null){
-				return ErrorCode.Success;
+				return ErrorCode.SignInSuccess_Message;
 			}else{
-				return ErrorCode.SignInFail;
+				return ErrorCode.SignInFail_Message;
 			}
 		}else{
-			return ErrorCode.UserNotExist;
+			return ErrorCode.UserNotExist_Message;
+		}
+		}catch(Exception e){
+			return ErrorCode.DataBaseError_Message;
 		}
 	}
 
-	public int SignUp(User user) {
+	public String SignUp(User user) {
+		try{
 		int no=userDAO.insert(user);
 		if(no==ErrorCode.Success){
-			return ErrorCode.Success;
+			return ErrorCode.SignUpSuccess_Message;
 		}else{
-			return ErrorCode.SignUpFail;
+			return ErrorCode.SignUpFail_Message;
+		}
+		}catch(Exception e){
+			return ErrorCode.DataBaseError_Message;
 		}
 	}
 

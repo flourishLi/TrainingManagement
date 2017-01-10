@@ -9,21 +9,28 @@ import com.trainingmanagement.dao.TrainMapper;
 import com.trainingmanagement.model.TrainWithBLOBs;
 import com.trainingmanagement.service.util.ErrorCode;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 @Service
 public class TrainImpl implements TrainInterface {
 
 	@Autowired
 	TrainMapper trainDAO;
-	public int Sponsor(int userid, byte[] userlist,byte[] content) {
+	public String Sponsor(int userid, byte[] userlist,byte[] content,Timestamp time) {
 		TrainWithBLOBs train=new TrainWithBLOBs();
 		train.setUserid(userid);
 		train.setTraincontent(content);
 		train.setUserlist(userlist);
+		train.setData(time);
+		try{
 		int no=trainDAO.insert(train);
 		if(no==ErrorCode.Success){
-			return ErrorCode.Success;
+			return ErrorCode.SponsorSuccess_Message;
 		}else{
-			return ErrorCode.SponsorFail;
+			return ErrorCode.SponsorFail_Message;
+		}
+		}catch(Exception e){
+			return ErrorCode.DataBaseError_Message;
 		}
 	}
 
@@ -38,16 +45,17 @@ public class TrainImpl implements TrainInterface {
 	}
 
 	@Override
-	public int ModifyTrain(int userid,int trainid,byte[] content, byte[] userlist) {
+	public String ModifyTrain(int userid,int trainid,byte[] content, byte[] userlist,Timestamp time) {
 		TrainWithBLOBs train=new TrainWithBLOBs();
 		train.setUserid(userid);
 		train.setTraincontent(content);
 		train.setUserlist(userlist);
+		train.setData(time);
 		int no=trainDAO.updateByPrimaryKeyWithBLOBs(train, trainid, userid);
 		if(no==ErrorCode.Success){
-			return ErrorCode.Success;
+			return ErrorCode.UpdateTrainSuccess_Message;
 		}else{
-			return ErrorCode.UpdateTrainFail;
+			return ErrorCode.UpdateTrainFail_Message;
 		}
 	}
 
@@ -62,6 +70,16 @@ public class TrainImpl implements TrainInterface {
 	public List<TrainWithBLOBs> GetAllTrains() {
 		List<TrainWithBLOBs> trainsAll=trainDAO.selectAll();
 		return trainsAll;
+	}
+
+	@Override
+	public TrainWithBLOBs SelectByUserIDAndTrainID(int userid, int trainid) {
+		TrainWithBLOBs train=trainDAO.selectByUserIDAndTrainID(trainid, userid);
+		if(train!=null){
+			return train;
+		}else{
+			return null;
+		}
 	}
 
 }

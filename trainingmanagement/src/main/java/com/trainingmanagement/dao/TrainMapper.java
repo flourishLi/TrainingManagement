@@ -25,5 +25,5 @@ public interface TrainMapper {
 
     int updateByPrimaryKey(Train record);
     
-
+    TrainWithBLOBs selectByUserIDAndTrainID(@Param("trainid")Integer trainid,@Param("userid")Integer userid );
 }
