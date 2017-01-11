@@ -2,6 +2,40 @@ package com.trainingmanagement.controller.request;
 
 
 public class SponsorRequest {
+
+	public int userid;
+   
+	public String content;
+	public int[] useridlist;
+	public long time;
+	public String trainname;
+	public String trainlocation;
+	
+	public String getTrainname() {
+		return trainname;
+	}
+
+
+	public void setTrainname(String trainname) {
+		this.trainname = trainname;
+	}
+
+
+	public String getTrainlocation() {
+		return trainlocation;
+	}
+
+
+	public void setTrainlocation(String trainlocation) {
+		this.trainlocation = trainlocation;
+	}
+
+
+
+
+
+
+	
 	    public int getUserid() {
 		return userid;
 	}
@@ -32,11 +66,6 @@ public class SponsorRequest {
 	}
 
 
-		public int userid;
-	   
-		public String content;
-		public int[] useridlist;
-		public long time;
 		
 		public long getTime() {
 			return time;

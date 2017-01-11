@@ -8,7 +8,7 @@ public interface UserInterface {
      * @param   用户名 密码
      * @return  1 登陆成功 101 失败 102 用户不存在
      */
-	String  SignIn(String username,String password);
+	User  SignIn(String username,String password);
      /**
       * 用户注册
       * @param   用户名

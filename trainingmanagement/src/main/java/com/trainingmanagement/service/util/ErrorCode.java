@@ -22,7 +22,9 @@ public class ErrorCode {
 	public static final String SponsorFail_Message="发起培训失败";
 	
 	public static final int DeleteTrainFail=105;
-	public static final String DeleteTrainFail_Message="删除培训失败";
+	public static final String DeleteTrainFail_Message="用户不具有权限，删除培训失败";
+	public static final String DeleteTrainSuccess_Message="删除培训成功";
+	public static final String DeleteUserOrTrainIsEmpty_Message="用户和培训编号不能为空";
 	
 	public static final int UpdateTrainFail=106;
 	public static final String UpdateTrainSuccess_Message="更新培训成功";
@@ -33,7 +35,11 @@ public class ErrorCode {
 	public static final String SponsorUserIsNull_Message="培训发起者不能为空";
 	
 	public static final int SearchTrainFailByUserIDAndTrainID=108;
-	public static final String SearchTrainFailByUserIDAndTrainID_Message="根据创建者培训编号查找失败，没有匹配成功";
+	public static final String SearchTrainFailByUserIDAndTrainID_Message="根据创建者培训编号查找失败，没有匹配成功，不具有修改权限";
+	
+	public static final int DisplayTrain_UserId_IsNull=109;
+	public static final String DisplayTrain_UserId_IsNull_Message="用户编号为空";
+	public static final String DisplayTrain_CheckPassed_Message="成功";
 	
 	public static final String RequestToJsonIsError_Message="请求内容转化成json对象的时候出错";
 	

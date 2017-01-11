@@ -16,9 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
-import com.trainingmanagement.controller.response.DisplayResponse;
-
+import com.trainingmanagement.controller.response.DeleteTrainResponse;
+import com.trainingmanagement.controller.response.DisplayTrainResponse;
+import com.trainingmanagement.controller.response.ModifyResponse;
 import com.trainingmanagement.controller.response.SponsorResponse;
 import com.trainingmanagement.controller.response.Train;
 import com.trainingmanagement.model.TrainWithBLOBs;
@@ -66,14 +66,78 @@ public class TrainController {
 
 	 }	 
 	 
+	 @ResponseBody
+	 @RequestMapping(value="/modify",produces ="application/json;charset=UTF-8")
+	 public String Modify(HttpServletRequest request,HttpServletResponse response){
+		 log.info("==========begin modify controller==========");
+		 
+		 //response
+		 ModifyResponse modifyResponse=new ModifyResponse();
+		 JSONObject response_jsonObj;
+
+	     
+		 //调用service
+		 String signUpResult=trainService.ModifyTrainCheck(request);
+	     
+		 //result to json
+		 modifyResponse.setMessage(signUpResult);
+		 response_jsonObj=JSONObject.fromObject(modifyResponse);
+		
+	 	 
+		 log.info("==========end modify controller==========");
+		 return response_jsonObj.toString();
+
+	 	 
+
+	 }	 
+	 
 
 	 @ResponseBody
+	 @RequestMapping(value="/delete",produces ="application/json;charset=UTF-8")
+	 public String DeleteTrain(HttpServletRequest request,HttpServletResponse response){
+		 log.info("==========begin DeleteTrain controller==========");
+		 
+		 //response
+		 DeleteTrainResponse deleteResponse=new DeleteTrainResponse();
+		 JSONObject response_jsonObj;
+
+	     
+		 //调用service
+		 String deleteResult=trainService.DeleteTrainCheck(request);
+	     
+		 //result to json
+		 deleteResponse.setMessage(deleteResult);
+		 response_jsonObj=JSONObject.fromObject(deleteResponse);
+		
+	 	 
+		 log.info("==========end DeleteTrain controller==========");
+		 return response_jsonObj.toString(); 	 
+	 }	 
+	 
+	 @ResponseBody
 	 @RequestMapping(value="/display",produces ="application/json;charset=UTF-8")
-	 public String DisplayTrain(HttpServletRequest request,HttpServletResponse response) throws IOException{
+	 public String displayTrains(HttpServletRequest request,HttpServletResponse response){
+		 log.info("==========begin displayTrains controller==========");		 
+		 //response
+		 JSONObject response_jsonObj;	     
+		 //调用service
+		 DisplayTrainResponse displayTrainResponse=trainService.displayTrainCheck(request);
+	     
+		 //result to json
+		 response_jsonObj=JSONObject.fromObject(displayTrainResponse);
+			 
+		 log.info("==========end displayTrains controller==========");
+		 return response_jsonObj.toString(); 	 
+	 }	 
+	 
+	 
+	 @ResponseBody
+	 @RequestMapping(value="/getAll",produces ="application/json;charset=UTF-8")
+	 public String GetAllTrains(HttpServletRequest request,HttpServletResponse response) throws IOException{
 		 log.info("==========begin DisplayTrain controller==========");
 		 
 		 //response
-		 DisplayResponse dispalyResponse=new DisplayResponse();
+		 DisplayTrainResponse dispalyResponse=new DisplayTrainResponse();
 		 JSONObject response_jsonObj = null;
 	     response.setCharacterEncoding("UTF-8");
 	     response.setContentType("application/json");     
@@ -89,10 +153,6 @@ public class TrainController {
 				}
 				 
 				 log.info("request sponsor string is"+stringBuffer.toString());
-				 // request json转bean
-//				 JSONObject jsonObj=JSONObject.fromObject(stringBuffer.toString());
-//				 DispalyTrainRequest sponsorRequest=(DispalyTrainRequest)JSONObject.toBean(jsonObj, DispalyTrainRequest.class);
-//				 log.info("sponsorRequest bean is");
 					
 			     List<TrainWithBLOBs> trains=trainIn.GetAllTrains();
 			     List<Train> strTrains=new LinkedList<Train>();
@@ -109,8 +169,7 @@ public class TrainController {
 					  train.establishdata=trainWithBLOBs.getData();
 					  
 					  strTrains.add(train);								  
-				  }
-			     //JSONArray jsonList = JSONArray.fromObject(strTrains);			     
+				  }		     
 			     dispalyResponse.setTrains(strTrains);			
 			    }
 				 catch (UnsupportedEncodingException e) {

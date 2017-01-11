@@ -1,29 +1,144 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.trainingmanagement.dao.TrainMapper" >
-  <resultMap id="BaseResultMap" type="com.trainingmanagement.model.Train" >
-    <id column="trainid" property="trainid" jdbcType="INTEGER" />
-    <result column="userid" property="userid" jdbcType="INTEGER" />
-    <result column="data" property="data" jdbcType="TIMESTAMP" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trainingmanagement.dao.TrainMapper">
+  <resultMap id="BaseResultMap" type="com.trainingmanagement.model.Train">
+    <id column="trainid" jdbcType="INTEGER" property="trainid" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="data" jdbcType="TIMESTAMP" property="data" />
+    <result column="trainname" jdbcType="VARCHAR" property="trainname" />
+    <result column="trainlocation" jdbcType="VARCHAR" property="trainlocation" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.trainingmanagement.model.TrainWithBLOBs" extends="BaseResultMap" >
-    <result column="traincontent" property="traincontent" jdbcType="LONGVARBINARY" />
-    <result column="userlist" property="userlist" jdbcType="LONGVARBINARY" />
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.trainingmanagement.model.TrainWithBLOBs">
+    <result column="traincontent" jdbcType="LONGVARBINARY" property="traincontent" />
+    <result column="userlist" jdbcType="LONGVARBINARY" property="userlist" />
   </resultMap>
-  <sql id="Base_Column_List" >
-    trainid, userid, data
+  <sql id="Base_Column_List">
+    trainid, userid, data, trainname, trainlocation
   </sql>
-  <sql id="Blob_Column_List" >
+  <sql id="Blob_Column_List">
     traincontent, userlist
   </sql>
-  <select id="selectAll" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from train
+    where trainid = #{trainid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from train
+     where trainid = #{trainid,jdbcType=INTEGER} and userid = #{userid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.trainingmanagement.model.TrainWithBLOBs">
+    insert into train (trainid, userid, data, 
+      trainname, trainlocation, traincontent, 
+      userlist)
+    values (#{trainid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{data,jdbcType=TIMESTAMP}, 
+      #{trainname,jdbcType=VARCHAR}, #{trainlocation,jdbcType=VARCHAR}, #{traincontent,jdbcType=LONGVARBINARY}, 
+      #{userlist,jdbcType=LONGVARBINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="com.trainingmanagement.model.TrainWithBLOBs">
+    insert into train
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="trainid != null">
+        trainid,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="data != null">
+        data,
+      </if>
+      <if test="trainname != null">
+        trainname,
+      </if>
+      <if test="trainlocation != null">
+        trainlocation,
+      </if>
+      <if test="traincontent != null">
+        traincontent,
+      </if>
+      <if test="userlist != null">
+        userlist,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="trainid != null">
+        #{trainid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="data != null">
+        #{data,jdbcType=TIMESTAMP},
+      </if>
+      <if test="trainname != null">
+        #{trainname,jdbcType=VARCHAR},
+      </if>
+      <if test="trainlocation != null">
+        #{trainlocation,jdbcType=VARCHAR},
+      </if>
+      <if test="traincontent != null">
+        #{traincontent,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="userlist != null">
+        #{userlist,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.trainingmanagement.model.TrainWithBLOBs">
+    update train
+    <set>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="data != null">
+        data = #{data,jdbcType=TIMESTAMP},
+      </if>
+      <if test="trainname != null">
+        trainname = #{trainname,jdbcType=VARCHAR},
+      </if>
+      <if test="trainlocation != null">
+        trainlocation = #{trainlocation,jdbcType=VARCHAR},
+      </if>
+      <if test="traincontent != null">
+        traincontent = #{traincontent,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="userlist != null">
+        userlist = #{userlist,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where trainid = #{trainid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.trainingmanagement.model.TrainWithBLOBs">
+    update train
+    set userid = #{userid,jdbcType=INTEGER},
+      data = #{data,jdbcType=TIMESTAMP},
+      trainname = #{trainname,jdbcType=VARCHAR},
+      trainlocation = #{trainlocation,jdbcType=VARCHAR},
+      traincontent = #{traincontent,jdbcType=LONGVARBINARY},
+      userlist = #{userlist,jdbcType=LONGVARBINARY}
+      where trainid = #{trainid,jdbcType=INTEGER} and userid = #{userid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.trainingmanagement.model.Train">
+    update train
+    set userid = #{userid,jdbcType=INTEGER},
+      data = #{data,jdbcType=TIMESTAMP},
+      trainname = #{trainname,jdbcType=VARCHAR},
+      trainlocation = #{trainlocation,jdbcType=VARCHAR}
+    where trainid = #{trainid,jdbcType=INTEGER}
+  </update>
+  
+ 
+  <select id="selectAll" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
     from train
   </select>
-   <select id="selectByUserID" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+   <select id="selectByUserID" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
     ,
@@ -31,97 +146,15 @@
     from train
     where userid = #{userid,jdbcType=INTEGER}
   </select>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from train
-    where trainid = #{trainid,jdbcType=INTEGER}
-  </select>
-  <select id="selectByUserIDAndTrainID" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+
+  <select id="selectByUserIDAndTrainID" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
    select 
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    where trainid = #{trainid,jdbcType=INTEGER and userid = #{userid,jdbcType=INTEGER}
+      from train
+    where trainid = #{trainid,jdbcType=INTEGER} and userid = #{userid,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from train
-    where trainid = #{trainid,jdbcType=INTEGER and userid = #{userid,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.trainingmanagement.model.TrainWithBLOBs" >
-    insert into train (trainid, userid, data, 
-      traincontent, userlist)
-    values (#{trainid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{data,jdbcType=TIMESTAMP}, 
-      #{traincontent,jdbcType=LONGVARBINARY}, #{userlist,jdbcType=LONGVARBINARY})
-  </insert>
-  <insert id="insertSelective" parameterType="com.trainingmanagement.model.TrainWithBLOBs" >
-    insert into train
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="trainid != null" >
-        trainid,
-      </if>
-      <if test="userid != null" >
-        userid,
-      </if>
-      <if test="data != null" >
-        data,
-      </if>
-      <if test="traincontent != null" >
-        traincontent,
-      </if>
-      <if test="userlist != null" >
-        userlist,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="trainid != null" >
-        #{trainid,jdbcType=INTEGER},
-      </if>
-      <if test="userid != null" >
-        #{userid,jdbcType=INTEGER},
-      </if>
-      <if test="data != null" >
-        #{data,jdbcType=TIMESTAMP},
-      </if>
-      <if test="traincontent != null" >
-        #{traincontent,jdbcType=LONGVARBINARY},
-      </if>
-      <if test="userlist != null" >
-        #{userlist,jdbcType=LONGVARBINARY},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.trainingmanagement.model.TrainWithBLOBs" >
-    update train
-    <set >
-      <if test="userid != null" >
-        userid = #{userid,jdbcType=INTEGER},
-      </if>
-      <if test="data != null" >
-        data = #{data,jdbcType=TIMESTAMP},
-      </if>
-      <if test="traincontent != null" >
-        traincontent = #{traincontent,jdbcType=LONGVARBINARY},
-      </if>
-      <if test="userlist != null" >
-        userlist = #{userlist,jdbcType=LONGVARBINARY},
-      </if>
-    </set>
-    where trainid = #{trainid,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.trainingmanagement.model.TrainWithBLOBs" >
-    update train
-    set traincontent = #{traincontent,jdbcType=LONGVARBINARY},
-      userlist = #{userlist,jdbcType=LONGVARBINARY}
-        data = #{data,jdbcType=TIMESTAMP}
-    where trainid = #{trainid,jdbcType=INTEGER and userid = #{userid,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.trainingmanagement.model.Train" >
-    update train
-    set userid = #{userid,jdbcType=INTEGER},
-      data = #{data,jdbcType=TIMESTAMP}
-    where trainid = #{trainid,jdbcType=INTEGER}
-  </update>
+
+
 </mapper>

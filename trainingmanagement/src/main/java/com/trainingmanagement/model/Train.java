@@ -1,6 +1,7 @@
 package com.trainingmanagement.model;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 public class Train {
     private Integer trainid;
@@ -8,6 +9,10 @@ public class Train {
     private Integer userid;
 
     private Timestamp data;
+
+    private String trainname;
+
+    private String trainlocation;
 
     public Integer getTrainid() {
         return trainid;
@@ -31,5 +36,21 @@ public class Train {
 
     public void setData(Timestamp data) {
         this.data = data;
+    }
+
+    public String getTrainname() {
+        return trainname;
+    }
+
+    public void setTrainname(String trainname) {
+        this.trainname = trainname == null ? null : trainname.trim();
+    }
+
+    public String getTrainlocation() {
+        return trainlocation;
+    }
+
+    public void setTrainlocation(String trainlocation) {
+        this.trainlocation = trainlocation == null ? null : trainlocation.trim();
     }
 }

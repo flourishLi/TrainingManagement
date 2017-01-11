@@ -1,9 +1,7 @@
 package com.trainingmanagement.controller.response;
 
-public class SponsorResponse {
-
-
-
+public class ModifyResponse {
+	
 	public String message;
 	public String getMessage() {
 		return message;
@@ -11,10 +9,8 @@ public class SponsorResponse {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	
-
-	public SponsorResponse() {
+	public ModifyResponse() {
 
  	}
+
 }

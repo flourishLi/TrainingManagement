@@ -27,14 +27,12 @@ public class UserController {
 	 public String SignIn(HttpServletRequest request,HttpServletResponse response){
 		 log.info("========== signin controller begin==========");		 
 		 //response
-		 SignInResponse signInResponse=new SignInResponse();
 		 JSONObject response_jsonObj;	 
 		 
 		 //调用service
-		 String signInResult=userService.SignInCheck(request);
+		 SignInResponse signInResponse=userService.SignInCheck(request);
 		 
 		 //result to json
-		 signInResponse.setMessage(signInResult);
 		 response_jsonObj=JSONObject.fromObject(signInResponse);
 		 
 		 log.info("========== signin controller end==========");

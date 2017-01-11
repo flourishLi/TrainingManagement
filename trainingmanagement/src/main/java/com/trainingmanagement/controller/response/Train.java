@@ -1,8 +1,15 @@
 package com.trainingmanagement.controller.response;
 
-import java.util.Date;
-
+import java.sql.Timestamp;
 public class Train {
+	public int userid;
+	public int trainid;
+	public Timestamp establishdata;
+	public String content;
+	public int[] useridlist;
+	public String trainname;
+	public String trainlocation;
+	
 	public int getUserid() {
 		return userid;
 	}
@@ -19,11 +26,11 @@ public class Train {
 		this.trainid = trainid;
 	}
 
-	public Date getEstablishdata() {
+	public Timestamp getEstablishdata() {
 		return establishdata;
 	}
 
-	public void setEstablishdata(Date establishdata) {
+	public void setEstablishdata(Timestamp establishdata) {
 		this.establishdata = establishdata;
 	}
 
@@ -43,11 +50,25 @@ public class Train {
 		this.useridlist = useridlist;
 	}
 
-	public int userid;
-	public int trainid;
-	public Date establishdata;
-	public String content;
-	public int[] useridlist;
+
+	
+	public String getTrainname() {
+		return trainname;
+	}
+
+	public void setTrainname(String trainname) {
+		this.trainname = trainname;
+	}
+
+	public String getTrainlocation() {
+		return trainlocation;
+	}
+
+	public void setTrainlocation(String trainlocation) {
+		this.trainlocation = trainlocation;
+	}
+
+
 	
 	public Train(){
 		

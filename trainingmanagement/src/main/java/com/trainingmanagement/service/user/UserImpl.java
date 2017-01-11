@@ -14,22 +14,22 @@ public class UserImpl implements UserInterface {
 
 	@Autowired
 	UserMapper userDAO;
-	public String SignIn(String username, String password) {
+	public User SignIn(String username, String password) {
 		//查询用户是否存在
 		try{
 		User user=userDAO.selectByUserName(username);
 		if(user !=null){//用户名密码核对
 			user=userDAO.selectByUserNameAndPassword(username,password);
 			if(user!=null){
-				return ErrorCode.SignInSuccess_Message;
+				return user;
 			}else{
-				return ErrorCode.SignInFail_Message;
+				return null;
 			}
 		}else{
-			return ErrorCode.UserNotExist_Message;
+			return null;
 		}
 		}catch(Exception e){
-			return ErrorCode.DataBaseError_Message;
+			return null;
 		}
 	}
 

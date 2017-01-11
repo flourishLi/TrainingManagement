@@ -2,7 +2,7 @@ package com.trainingmanagement.controller.response;
 
 import java.util.List;
 
-public class DisplayResponse {
+public class DisplayTrainResponse {
 	public String message;
 	public String getMessage() {
 		return message;
@@ -19,7 +19,7 @@ public class DisplayResponse {
 	}
 
 	public List<Train> trains;
-	public DisplayResponse() {
+	public DisplayTrainResponse() {
 
  	}
 }

@@ -14,6 +14,7 @@ import com.sun.org.apache.xml.internal.serializer.ElemDesc;
 import com.trainingmanagement.controller.UserController;
 import com.trainingmanagement.controller.request.SignInRequest;
 import com.trainingmanagement.controller.request.SignUpRequest;
+import com.trainingmanagement.controller.response.SignInResponse;
 import com.trainingmanagement.model.User;
 import com.trainingmanagement.service.util.ErrorCode;
 
@@ -26,7 +27,8 @@ public  class UserRequestCheck {
 	 UserInterface userInterface;
 	 Logger log = Logger.getLogger(UserController.class);
 	 
-	 public String SignInCheck(HttpServletRequest request ){
+	 public SignInResponse SignInCheck(HttpServletRequest request ){
+		 SignInResponse signInResponse=new SignInResponse();
 		 if(request.getMethod()=="POST"){
 			 StringBuffer stringBuffer=new StringBuffer();
 			 InputStreamReader reader;
@@ -46,28 +48,36 @@ public  class UserRequestCheck {
 				 if(user.username!=null&&user.password!=null){
 				     if(user.username.length()==0||user.password.length()==0){
 					     log.info("request user is null");
-				         return ErrorCode.SignInEmpty_Message;
+				         signInResponse.setMessage(ErrorCode.SignInEmpty_Message);
 				     }else {
-					    return userInterface.SignIn(user.username, user.password);
+					    User userResult= userInterface.SignIn(user.username, user.password);
+					    if(userResult!=null){
+					    signInResponse.setMessage(ErrorCode.SignInSuccess_Message);
+					    signInResponse.setUserid(userResult.getUserid());
+					    }else{
+					    	signInResponse.setMessage(ErrorCode.SignInFail_Message);
+					    }
 				     }
 				 }else{
-					 return ErrorCode.SignInNull_Message;
+					  signInResponse.setMessage(ErrorCode.SignInNull_Message);
 				 }
 				 
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
-				return ErrorCode.InputStreamToUTFIsError_Message;
+				 signInResponse.setMessage(ErrorCode.InputStreamToUTFIsError_Message);
 			} catch (IOException e) {
 				e.printStackTrace();
-				return ErrorCode.InputStreamIsError_Message;
+				 signInResponse.setMessage(ErrorCode.InputStreamIsError_Message);
 			}catch (JSONException e) {
 				e.printStackTrace();
-				return ErrorCode.RequestToJsonIsError_Message;
+				 signInResponse.setMessage(ErrorCode.RequestToJsonIsError_Message);
 			}
 		 }
 	 else{	 
-			 return ErrorCode.RequestMethodError_Message;
-	     }		 	 
+		 signInResponse.setMessage(ErrorCode.RequestMethodError_Message);
+	     }	
+		 
+		 return signInResponse;
 	 	
 	 } 
 

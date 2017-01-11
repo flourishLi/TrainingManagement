@@ -1,7 +1,26 @@
 package com.trainingmanagement.controller.request;
 
 public class ModifyTrainRequest {
-
+	public int userid;
+	public int trainid;
+	public String content;
+	public int[] useridlist;
+	public long time;
+	public String getTrainname() {
+		return trainname;
+	}
+	public void setTrainname(String trainname) {
+		this.trainname = trainname;
+	}
+	public String getTrainlocation() {
+		return trainlocation;
+	}
+	public void setTrainlocation(String trainlocation) {
+		this.trainlocation = trainlocation;
+	}
+	public String trainname;
+	public String trainlocation;
+	
 	public int getUserid() {
 		return userid;
 	}
@@ -26,11 +45,7 @@ public class ModifyTrainRequest {
 	public void setTime(long time) {
 		this.time = time;
 	}
-	public int userid;
-	   
-	public String content;
-	public int[] useridlist;
-	public long time;
+
 	
 	public int getTrainid() {
 		return trainid;
@@ -38,5 +53,5 @@ public class ModifyTrainRequest {
 	public void setTrainid(int trainid) {
 		this.trainid = trainid;
 	}
-	public int trainid;
+
 }
