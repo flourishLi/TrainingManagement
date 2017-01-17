@@ -3,6 +3,7 @@ package com.trainingmanagement.service.user;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -10,10 +11,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sun.org.apache.xml.internal.serializer.ElemDesc;
 import com.trainingmanagement.controller.UserController;
 import com.trainingmanagement.controller.request.SignInRequest;
 import com.trainingmanagement.controller.request.SignUpRequest;
+import com.trainingmanagement.controller.response.GetAllUsersResponse;
 import com.trainingmanagement.controller.response.SignInResponse;
 import com.trainingmanagement.model.User;
 import com.trainingmanagement.service.util.ErrorCode;
@@ -27,7 +28,7 @@ public  class UserRequestCheck {
 	 UserInterface userInterface;
 	 Logger log = Logger.getLogger(UserController.class);
 	 
-	 public SignInResponse SignInCheck(HttpServletRequest request ){
+	 public SignInResponse signInCheck(HttpServletRequest request ){
 		 SignInResponse signInResponse=new SignInResponse();
 		 if(request.getMethod()=="POST"){
 			 StringBuffer stringBuffer=new StringBuffer();
@@ -50,7 +51,7 @@ public  class UserRequestCheck {
 					     log.info("request user is null");
 				         signInResponse.setMessage(ErrorCode.SignInEmpty_Message);
 				     }else {
-					    User userResult= userInterface.SignIn(user.username, user.password);
+					    User userResult= userInterface.signIn(user.username, user.password);
 					    if(userResult!=null){
 					    signInResponse.setMessage(ErrorCode.SignInSuccess_Message);
 					    signInResponse.setUserid(userResult.getUserid());
@@ -81,7 +82,7 @@ public  class UserRequestCheck {
 	 	
 	 } 
 
-     public String  SignUpCheck(HttpServletRequest request) {
+     public String  signUpCheck(HttpServletRequest request) {
     	 if(request.getMethod()=="POST"){
 			 StringBuffer stringBuffer=new StringBuffer();
 			 InputStreamReader reader;
@@ -108,7 +109,7 @@ public  class UserRequestCheck {
 					     user.setUsername(userRequest.username);
 					     user.setPassword(userRequest.password);
 					     //注册
-					     return userInterface.SignUp(user);	
+					     return userInterface.signUp(user);	
 				    }
 				 }else{
 					 return ErrorCode.SignUpNull_Message;
@@ -128,4 +129,21 @@ public  class UserRequestCheck {
 			return ErrorCode.RequestMethodError_Message;
 	     }
 }
+     
+     public String  getAllUsersCheck(HttpServletRequest request) {
+    	 if(request.getMethod()=="POST"){
+	        GetAllUsersResponse response=new GetAllUsersResponse();
+	        List<User> users=userInterface.getAllUsers();       
+	        response.setUsers(users);
+	        
+	        JSONObject response_jsonObj=JSONObject.fromObject(response);  
+	        
+	        return response_jsonObj.toString();
+		 }
+	 else{
+			return ErrorCode.RequestMethodError_Message;
+	     }
+}
+
+
 }

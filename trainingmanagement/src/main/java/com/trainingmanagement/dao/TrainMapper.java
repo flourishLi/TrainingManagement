@@ -25,5 +25,7 @@ public interface TrainMapper {
 	List<TrainWithBLOBs> selectAll();
 
 	TrainWithBLOBs selectByUserIDAndTrainID(@Param("trainid")int trainid, @Param("userid")int userid);
+	
+	List<TrainWithBLOBs> selectByLikeTrainName(String trainname);
 
 }

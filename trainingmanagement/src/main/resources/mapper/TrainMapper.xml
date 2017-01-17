@@ -138,6 +138,15 @@
     <include refid="Blob_Column_List" />
     from train
   </select>
+   
+  <select id="selectByLikeTrainName" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from train
+    where trainname like "%"#{trainname,jdbcType=VARCHAR}"%"
+  </select>
    <select id="selectByUserID" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />

@@ -14,9 +14,11 @@ import org.springframework.stereotype.Service;
 import com.trainingmanagement.controller.UserController;
 import com.trainingmanagement.controller.request.DeleteTrainRequest;
 import com.trainingmanagement.controller.request.DispalyTrainRequest;
+import com.trainingmanagement.controller.request.FuzzySearchRequest;
 import com.trainingmanagement.controller.request.ModifyTrainRequest;
 import com.trainingmanagement.controller.request.SponsorRequest;
 import com.trainingmanagement.controller.response.DisplayTrainResponse;
+import com.trainingmanagement.controller.response.FuzzySearchResponse;
 import com.trainingmanagement.model.TrainWithBLOBs;
 import com.trainingmanagement.service.util.ByteConvertion;
 import com.trainingmanagement.service.util.ErrorCode;
@@ -31,7 +33,7 @@ public class TrainRequestCheck {
 	 TrainInterface trainService;
 	 Logger log = Logger.getLogger(UserController.class);
 	
-	public String SponorCheck(HttpServletRequest request) {
+	public String sponorCheck(HttpServletRequest request) {
 		 if(request.getMethod()=="POST"){
 			 StringBuffer stringBuffer=new StringBuffer();
 			 InputStreamReader reader;
@@ -75,7 +77,7 @@ public class TrainRequestCheck {
 				    if(sponsorRequest.time!=0){
 				    	train.setData(new Timestamp(sponsorRequest.time));
 				    }
-					return trainService.Sponsor(train);			
+					return trainService.sponsor(train);			
 				 }
 			}
 				 catch (UnsupportedEncodingException e) {
@@ -93,7 +95,7 @@ public class TrainRequestCheck {
 	    }	
 	}
 
-	public String ModifyTrainCheck(HttpServletRequest request) {
+	public String modifyTrainCheck(HttpServletRequest request) {
 		 if(request.getMethod()=="POST"){
 			 StringBuffer stringBuffer=new StringBuffer();
 			 InputStreamReader reader;
@@ -115,7 +117,7 @@ public class TrainRequestCheck {
 					 return ErrorCode.SponsorUserOrTrainIsEmpty_Message;
 				 }else {
 					//查询修改者是否有权限
-				 TrainWithBLOBs train=trainService.SelectByUserIDAndTrainID(modifyTrainRequest.userid, modifyTrainRequest.trainid);
+				 TrainWithBLOBs train=trainService.selectByUserIDAndTrainID(modifyTrainRequest.userid, modifyTrainRequest.trainid);
 				 if(train!=null){
 					 //设置培训内容
 					 if(modifyTrainRequest.content!=null){
@@ -143,7 +145,7 @@ public class TrainRequestCheck {
 						  train.setTrainlocation(modifyTrainRequest.trainlocation);
 					 }
 					 //修改
-					 return trainService.ModifyTrain(train);
+					 return trainService.modifyTrain(train);
 				 }else{//匹配失败 不具有修改权限
 					    return ErrorCode.SearchTrainFailByUserIDAndTrainID_Message;
 				     }
@@ -164,7 +166,7 @@ public class TrainRequestCheck {
 	    }	
 	}
 	
-	public String DeleteTrainCheck(HttpServletRequest request) {
+	public String deleteTrainCheck(HttpServletRequest request) {
 		 if(request.getMethod()=="POST"){
 			 StringBuffer stringBuffer=new StringBuffer();
 			 InputStreamReader reader;
@@ -186,7 +188,7 @@ public class TrainRequestCheck {
 					 return ErrorCode.DeleteUserOrTrainIsEmpty_Message;
 				 }else {
 					 //删除培训
-					 return trainService.DeleteTrain(deleteTrainRequest.userid,deleteTrainRequest.trainid);
+					 return trainService.deleteTrain(deleteTrainRequest.userid,deleteTrainRequest.trainid);
 				 }
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
@@ -202,7 +204,6 @@ public class TrainRequestCheck {
 			return ErrorCode.RequestMethodError_Message;
 	    }	
 	}
-
 	
 	public DisplayTrainResponse displayTrainCheck(HttpServletRequest request) {
 		 DisplayTrainResponse displayTrainResponse=new DisplayTrainResponse();
@@ -228,7 +229,7 @@ public class TrainRequestCheck {
 				 }else {
 					 //参数检查正确
 					 displayTrainResponse.setMessage(ErrorCode.DisplayTrain_CheckPassed_Message);
-					 displayTrainResponse.setTrains(trainService.GetTrainsByUserId(dispalyTrainRequest.userid));
+					 displayTrainResponse.setTrains(trainService.getTrainsByUserId(dispalyTrainRequest.userid));
 					
 				 }
 			} catch (UnsupportedEncodingException e) {
@@ -248,6 +249,51 @@ public class TrainRequestCheck {
 	}
 
 	
+	
+	public FuzzySearchResponse fuzzySearchCheck(HttpServletRequest request) {
+		FuzzySearchResponse fuzzySearchResponse=new FuzzySearchResponse();
+		 if(request.getMethod()=="POST"){
+			 StringBuffer stringBuffer=new StringBuffer();
+			 InputStreamReader reader;
+			try {
+				reader = new InputStreamReader(request.getInputStream(),"UTF-8");
+				 int end=0;
+				 while((end= reader.read())!= -1){
+					 stringBuffer.append((char)end);
+				}
+				 
+				 log.info("fuzzySearchRequest string is"+stringBuffer.toString());
+				 // request json转bean
+				 JSONObject jsonObj=JSONObject.fromObject(stringBuffer.toString());
+				 FuzzySearchRequest fuzzySearchRequest=(FuzzySearchRequest)JSONObject.toBean(jsonObj, FuzzySearchRequest.class);
+				 log.info("fuzzySearchRequest bean is"+fuzzySearchRequest.trainname);
+				 //培训名称为空
+				 if(fuzzySearchRequest.trainname==null){
+					 log.info("fuzzySearchRequest trainname is null");
+					 fuzzySearchResponse.setMessage(ErrorCode.FuzzySearchTrain_TrainNameIsNull_Message);
+				 }else {
+					 //模糊查询
+					 if(trainService.fuzzySearch(fuzzySearchRequest.trainname).size()==0){
+						 fuzzySearchResponse.setMessage(ErrorCode.FuzzySearchTrain_TrainNameNotMatch_Message);
+					 }
+					 fuzzySearchResponse.setTrains(trainService.fuzzySearch(fuzzySearchRequest.trainname));
+				 }
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+				fuzzySearchResponse.setMessage(ErrorCode.InputStreamToUTFIsError_Message);
+			} catch (IOException e) {
+				e.printStackTrace();
+				fuzzySearchResponse.setMessage(ErrorCode.InputStreamIsError_Message);
+			}catch (JSONException e) {
+				e.printStackTrace();
+				fuzzySearchResponse.setMessage(ErrorCode.RequestToJsonIsError_Message);
+			}		
+		 }else{
+			 fuzzySearchResponse.setMessage( ErrorCode.RequestMethodError_Message);
+	    }
+		 return fuzzySearchResponse;
+	}
+
 	
 	
 	

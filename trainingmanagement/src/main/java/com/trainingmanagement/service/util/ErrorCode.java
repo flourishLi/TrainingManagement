@@ -10,6 +10,7 @@ public class ErrorCode {
 	public static final String UserNotExist_Message="用户不存在，请先注册";
 	public static final int SignUpFail=103;
 	public static final String SignUpFail_Message="注册失败";
+	public static final String SignUpRepeat_Message="该用户已经注册";
 	
 	public static final String RequestMethodError_Message="请求格式必须是post";
 	public static final String SignInEmpty_Message="用户名密码不能为空";
@@ -40,6 +41,9 @@ public class ErrorCode {
 	public static final int DisplayTrain_UserId_IsNull=109;
 	public static final String DisplayTrain_UserId_IsNull_Message="用户编号为空";
 	public static final String DisplayTrain_CheckPassed_Message="成功";
+	
+	public static final String FuzzySearchTrain_TrainNameIsNull_Message="培训名称为空";
+	public static final String FuzzySearchTrain_TrainNameNotMatch_Message="培训名称匹配结果为空";
 	
 	public static final String RequestToJsonIsError_Message="请求内容转化成json对象的时候出错";
 	

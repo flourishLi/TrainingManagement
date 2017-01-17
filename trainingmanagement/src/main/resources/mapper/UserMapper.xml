@@ -16,6 +16,12 @@
     where userid = #{userid,jdbcType=INTEGER}
   </select>
   
+    <select id="selectAllUsers" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+  </select>
+  
   <select id="selectByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

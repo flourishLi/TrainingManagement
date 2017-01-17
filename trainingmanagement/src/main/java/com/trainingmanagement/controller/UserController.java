@@ -23,40 +23,59 @@ public class UserController {
 	 Logger log = Logger.getLogger(UserController.class);
 	 
 	 @ResponseBody
-	 @RequestMapping(value="/signin",produces ="application/json;charset=UTF-8")
-	 public String SignIn(HttpServletRequest request,HttpServletResponse response){
+	 @RequestMapping(value="/signin")
+	 public String signIn(HttpServletRequest request,HttpServletResponse response){
 		 log.info("========== signin controller begin==========");		 
 		 //response
 		 JSONObject response_jsonObj;	 
 		 
 		 //调用service
-		 SignInResponse signInResponse=userService.SignInCheck(request);
+		 SignInResponse signInResponse=userService.signInCheck(request);
 		 
 		 //result to json
 		 response_jsonObj=JSONObject.fromObject(signInResponse);
 		 
+		 log.info(response_jsonObj.toString());
 		 log.info("========== signin controller end==========");
 		 return response_jsonObj.toString();		
 	 }	 
 	 
 	 @ResponseBody
-	 @RequestMapping(value="/signup",produces ="application/json;charset=UTF-8")
-	 public String SignUp(HttpServletRequest request,HttpServletResponse response){
+	 @RequestMapping(value="/signup")
+	 public String signUp(HttpServletRequest request,HttpServletResponse response){
+		 //response.setHeader("Access-Control-Allow-Origin", "*");
 		 log.info("========== signup controller begin==========");
 		 //response
 		 SignUpResponse signUpResponse=new SignUpResponse();
 		 JSONObject response_jsonObj;    
 	     
 		 //调用service
-		 String signUpResult=userService.SignUpCheck(request);
+		 String signUpResult=userService.signUpCheck(request);
 	     
 		 //result to json
 		 signUpResponse.setMessage(signUpResult);
 		 response_jsonObj=JSONObject.fromObject(signUpResponse);
 		
-	 	 
+		 log.info(response_jsonObj.toString());
 		 log.info("========== signup controller end==========");
 		 return response_jsonObj.toString();
+	 }
+	 
+	 
+	 @ResponseBody
+	 @RequestMapping(value="/getusers")
+	 public String getAllUsers(HttpServletRequest request,HttpServletResponse response){
+		 //response.setHeader("Access-Control-Allow-Origin", "*");
+		 log.info("========== getAllUsers controller begin==========");
+		
+	     
+		 //调用service
+		 String usersResult=userService.getAllUsersCheck(request);
+	     
+		
+		 log.info(usersResult);
+		 log.info("========== getAllUsers controller end==========");
+		 return usersResult;
 	 }
 	 
 

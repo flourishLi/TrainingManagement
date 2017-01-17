@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.trainingmanagement.controller.response.DeleteTrainResponse;
 import com.trainingmanagement.controller.response.DisplayTrainResponse;
+import com.trainingmanagement.controller.response.FuzzySearchResponse;
 import com.trainingmanagement.controller.response.ModifyResponse;
 import com.trainingmanagement.controller.response.SponsorResponse;
 import com.trainingmanagement.controller.response.Train;
@@ -42,8 +43,8 @@ public class TrainController {
 	 Logger log = Logger.getLogger(UserController.class);
 	 
 	 @ResponseBody
-	 @RequestMapping(value="/sponsor",produces ="application/json;charset=UTF-8")
-	 public String Sponsor(HttpServletRequest request,HttpServletResponse response){
+	 @RequestMapping(value="/sponsor")
+	 public String sponsor(HttpServletRequest request,HttpServletResponse response){
 		 log.info("==========begin sponsor controller==========");
 		 
 		 //response
@@ -52,13 +53,13 @@ public class TrainController {
 
 	     
 		 //调用service
-		 String signUpResult=trainService.SponorCheck(request);
+		 String signUpResult=trainService.sponorCheck(request);
 	     
 		 //result to json
 		 sponsorResponse.setMessage(signUpResult);
 		 response_jsonObj=JSONObject.fromObject(sponsorResponse);
 		
-	 	 
+		 log.info(response_jsonObj.toString());
 		 log.info("==========end sponsor controller==========");
 		 return response_jsonObj.toString();
 
@@ -67,8 +68,8 @@ public class TrainController {
 	 }	 
 	 
 	 @ResponseBody
-	 @RequestMapping(value="/modify",produces ="application/json;charset=UTF-8")
-	 public String Modify(HttpServletRequest request,HttpServletResponse response){
+	 @RequestMapping(value="/modify")
+	 public String modify(HttpServletRequest request,HttpServletResponse response){
 		 log.info("==========begin modify controller==========");
 		 
 		 //response
@@ -77,13 +78,13 @@ public class TrainController {
 
 	     
 		 //调用service
-		 String signUpResult=trainService.ModifyTrainCheck(request);
+		 String signUpResult=trainService.modifyTrainCheck(request);
 	     
 		 //result to json
 		 modifyResponse.setMessage(signUpResult);
 		 response_jsonObj=JSONObject.fromObject(modifyResponse);
 		
-	 	 
+		 log.info(response_jsonObj.toString());
 		 log.info("==========end modify controller==========");
 		 return response_jsonObj.toString();
 
@@ -93,8 +94,8 @@ public class TrainController {
 	 
 
 	 @ResponseBody
-	 @RequestMapping(value="/delete",produces ="application/json;charset=UTF-8")
-	 public String DeleteTrain(HttpServletRequest request,HttpServletResponse response){
+	 @RequestMapping(value="/delete")
+	 public String deleteTrain(HttpServletRequest request,HttpServletResponse response){
 		 log.info("==========begin DeleteTrain controller==========");
 		 
 		 //response
@@ -103,19 +104,19 @@ public class TrainController {
 
 	     
 		 //调用service
-		 String deleteResult=trainService.DeleteTrainCheck(request);
+		 String deleteResult=trainService.deleteTrainCheck(request);
 	     
 		 //result to json
 		 deleteResponse.setMessage(deleteResult);
 		 response_jsonObj=JSONObject.fromObject(deleteResponse);
 		
-	 	 
+		 log.info(response_jsonObj.toString());
 		 log.info("==========end DeleteTrain controller==========");
 		 return response_jsonObj.toString(); 	 
 	 }	 
 	 
 	 @ResponseBody
-	 @RequestMapping(value="/display",produces ="application/json;charset=UTF-8")
+	 @RequestMapping(value="/display")
 	 public String displayTrains(HttpServletRequest request,HttpServletResponse response){
 		 log.info("==========begin displayTrains controller==========");		 
 		 //response
@@ -125,15 +126,33 @@ public class TrainController {
 	     
 		 //result to json
 		 response_jsonObj=JSONObject.fromObject(displayTrainResponse);
-			 
+			
+		 log.info(response_jsonObj.toString());
 		 log.info("==========end displayTrains controller==========");
+		 return response_jsonObj.toString(); 	 
+	 }	 
+	 
+	 @ResponseBody
+	 @RequestMapping(value="/search")
+	 public String fuzzySearch(HttpServletRequest request,HttpServletResponse response){
+		 log.info("==========begin fuzzySearch controller==========");		 
+		 //response
+		 JSONObject response_jsonObj;	     
+		 //调用service
+		 FuzzySearchResponse fuzzySearchResponse=trainService.fuzzySearchCheck(request);
+	     
+		 //result to json
+		 response_jsonObj=JSONObject.fromObject(fuzzySearchResponse);
+			
+		 log.info(response_jsonObj.toString());
+		 log.info("==========end fuzzySearch controller==========");
 		 return response_jsonObj.toString(); 	 
 	 }	 
 	 
 	 
 	 @ResponseBody
-	 @RequestMapping(value="/getAll",produces ="application/json;charset=UTF-8")
-	 public String GetAllTrains(HttpServletRequest request,HttpServletResponse response) throws IOException{
+	 @RequestMapping(value="/getAll")
+	 public String getAllTrains(HttpServletRequest request,HttpServletResponse response) throws IOException{
 		 log.info("==========begin DisplayTrain controller==========");
 		 
 		 //response
@@ -154,7 +173,7 @@ public class TrainController {
 				 
 				 log.info("request sponsor string is"+stringBuffer.toString());
 					
-			     List<TrainWithBLOBs> trains=trainIn.GetAllTrains();
+			     List<TrainWithBLOBs> trains=trainIn.getAllTrains();
 			     List<Train> strTrains=new LinkedList<Train>();
 			     
 			     for (TrainWithBLOBs trainWithBLOBs : trains) {
@@ -185,11 +204,15 @@ public class TrainController {
 		 }else{		        
 			   return ErrorCode.RequestMethodError_Message;	        
 	     }	
-		 log.info("==========end DisplayTrain controller==========");
+		
 		 //返回客户端
-		 response_jsonObj=JSONObject.fromObject(dispalyResponse);	  
+		 response_jsonObj=JSONObject.fromObject(dispalyResponse);	
+		 
+		 log.info(response_jsonObj.toString());
+		 log.info("==========end DisplayTrain controller==========");
 		 return response_jsonObj.toString();
 		
+
 	 }	 
 	 
 
